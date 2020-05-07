@@ -23,7 +23,7 @@ namespace UGEvacuation
 
             foreach (var node in graph.Where(n => startNodeIds.Keys.Contains(n.Id)))
             {
-                var pathsForNode = PathManager.GetRescuePathForNode(node, new List<Node>() { node }).Where(p => p.NodesList != null).ToList();
+                var pathsForNode = PathManager.GetAllRescuePathsForNode(node, new List<Node>() { node }).Where(p => p.NodesList != null).ToList();
                 startNodeIds[node.Id] = pathsForNode;
                 paths.AddRange(pathsForNode);
             }
