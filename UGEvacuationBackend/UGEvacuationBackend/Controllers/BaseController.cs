@@ -18,6 +18,8 @@ namespace UGEvacuationBackend.Controllers
                     return StatusCode(403);
                 case ErrorType.InvalidArgument:
                     return BadRequest(); 
+                case ErrorType.NoPath:
+                    return StatusCode(433);
             }
             return new StatusCodeResult((int)System.Net.HttpStatusCode.InternalServerError);
         }

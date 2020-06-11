@@ -5,6 +5,7 @@ namespace UGEvacuationCommon.Enums
         Unspecified,
         InvalidPassword,
         AccessDenied,
-        InvalidArgument
+        InvalidArgument,
+        NoPath
     }
 }

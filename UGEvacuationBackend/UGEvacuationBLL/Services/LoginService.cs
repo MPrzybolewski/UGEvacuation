@@ -56,8 +56,8 @@ namespace UGEvacuationBLL.Services
     
             var token = new JwtSecurityToken(_appSettings.Jwt.Issuer,    
                 _appSettings.Jwt.Issuer,    
-                null,    
-                expires: DateTime.Now.AddMinutes(120),    
+                null,     
+                expires: DateTime.Now.AddYears(1),
                 signingCredentials: credentials);    
     
             return new JwtSecurityTokenHandler().WriteToken(token);    
