@@ -13,19 +13,19 @@ namespace UGEvacuationBLL.Services
 {
     public class LoginService : BaseService, ILoginService
     {
-        private readonly IAppUserRepository _appUserRepository;
+        private readonly IAdminUserRepository _adminUserRepository;
         private readonly IAppSettings _appSettings;
         
-        public LoginService(IAppUserRepository appUserRepository, IAppSettings appSettings)
+        public LoginService(IAdminUserRepository adminUserRepository, IAppSettings appSettings)
         {
-            _appUserRepository = appUserRepository;
+            _adminUserRepository = adminUserRepository;
             _appSettings = appSettings;
         }
         public AuthenticatedUser AuthenticateUser(Login login)
         {
             try
             {
-                var appUser = _appUserRepository.GetByUsername(login.Username);
+                var appUser = _adminUserRepository.GetByUsername(login.Username);
 
                 if (appUser == null)
                     return null;

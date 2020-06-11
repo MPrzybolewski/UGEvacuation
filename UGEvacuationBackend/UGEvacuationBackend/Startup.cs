@@ -41,8 +41,11 @@ namespace UGEvacuationBackend
                 options.UseSqlServer(Configuration.GetConnectionString("UGEvacuationContext")));
             
             services.AddScoped<ILoginService, LoginService>();
-            services.AddScoped<IAppUserRepository, AppUserRepository>();
             services.AddScoped<INotificationsService, NotificationService>();
+            services.AddScoped<IRegistrationService, RegistrationService>();
+            
+            services.AddScoped<IAdminUserRepository, AdminUserRepository>();
+            services.AddScoped<IAppUserRepository, AppUserRepository>();
             
             services.AddControllers();
             

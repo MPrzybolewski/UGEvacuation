@@ -10,8 +10,8 @@ using UGEvacuationDAL;
 namespace UGEvacuationDAL.Migrations
 {
     [DbContext(typeof(UGEvacuationContext))]
-    [Migration("20200603233947_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20200611145842_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace UGEvacuationDAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("UGEvacuationDAL.Entities.AppUser", b =>
+            modelBuilder.Entity("UGEvacuationDAL.Entities.AdminUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -34,6 +34,23 @@ namespace UGEvacuationDAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AdminUser");
+                });
+
+            modelBuilder.Entity("UGEvacuationDAL.Entities.AppUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

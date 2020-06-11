@@ -14,4 +14,8 @@
       <Folder Include="Migrations" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\UGEvacuationCommon\UGEvacuationCommon.csproj" />
+    </ItemGroup>
+
 </Project>

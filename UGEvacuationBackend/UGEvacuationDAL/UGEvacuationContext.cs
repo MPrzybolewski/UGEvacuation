@@ -9,10 +9,12 @@ namespace UGEvacuationDAL
         {
         }
         
+        public DbSet<AdminUser> AdminUsers { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<AdminUser>().ToTable("AdminUser");
             modelBuilder.Entity<AppUser>().ToTable("AppUser");
         }
     }
