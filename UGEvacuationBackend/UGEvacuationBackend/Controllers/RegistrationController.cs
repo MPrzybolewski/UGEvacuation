@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UGEvacuationBackend.Models;
@@ -19,15 +20,15 @@ namespace UGEvacuationBackend.Controllers
         
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult RegisterAppUser([FromBody] RegisterAppUserRequest registerAppUserRequest)
+        public async Task<IActionResult> RegisterAppUser([FromBody] RegisterAppUserRequest registerAppUserRequest)
         {
             try
             {
                 if (registerAppUserRequest == null)
                     return BadRequest();
                 
-                _registrationService.RegisterAppUser(registerAppUserRequest.Token);
-                return Ok();
+                var appUserId =  await _registrationService.RegisterAppUser(registerAppUserRequest.Token);
+                return Ok(appUserId);
             }
             catch (Exception ex)
             {

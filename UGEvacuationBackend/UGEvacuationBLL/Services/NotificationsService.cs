@@ -1,41 +1,76 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UGEvacuationBLL.Helpers;
+using System.Threading.Tasks;
+using FirebaseAdmin.Messaging;
 using UGEvacuationBLL.Services.Interfaces;
-using UGEvacuationCommon.Enums;
-using UGEvacuationCommon.Models;
 
 namespace UGEvacuationBLL.Services
 {
     public class NotificationService : BaseService, INotificationsService
     {
-        public void SendLocationRequestNotifications(List<EdgeTemplate> blockedEdges)
+        private readonly FirebaseMessaging _messaging;
+        public NotificationService()
+        {
+            _messaging = FirebaseMessaging.DefaultInstance;
+        }
+        public async Task SendLocationRequestNotifications(Guid evacuationId, List<string> tokens)
         {
             try
             {
-                var data = new Data();
-                var graph = data.GenerateGraph(blockedEdges);
-
-                CheckIfThereIsPathForEveryNode(graph);
+                var messagees = new List<Message>();
+                foreach (var token in tokens)
+                {
+                    messagees.Add(new Message()
+                        {
+                            Token = token,
+                            Notification = new Notification
+                            {
+                                Title = "Ewakuacja",
+                                Body = "Kliknij, aby zobaczyć najlepszą drogę ewakuacji"
+                            },
+                            Data = new Dictionary<string, string>
+                            {
+                                ["EvacuationId"] = evacuationId.ToString()
+                            }
+                        }
+                    );
+                }
+                await _messaging.SendAllAsync(messagees);
             }
             catch (Exception ex)
             {
-                throw HandleExcpetion(ex, "Error - Send Location Request Notifications");
+                Console.WriteLine("Invalid Token");
             }
         }
 
-        private void CheckIfThereIsPathForEveryNode(List<Node> graph)
+        public async Task SendBestPathNotifications(List<string> tokens, string bestPathString)
         {
-            var startNodeIds = Data.GetAllStartNodesIds();
-
-            var result = PathManager.GetBestPathForNodesIds(graph, startNodeIds);
-
-            var paths = result.Values.ToList();
-
-            if (paths.FirstOrDefault(p => p.NodesList == null || p.NodesList.Count == 0) != null)
+            try
             {
-                throw new UGEvacuationException(message: "CheckIfThereIsPathForEveryNode - there is node without any path", type: ErrorType.NoPath);
+                var messagees = new List<Message>();
+                foreach (var token in tokens)
+                {
+                    messagees.Add(new Message()
+                        {
+                            Token = token,
+                            Notification = new Notification
+                            {
+                                Title = "Ścieżka",
+                                Body = "Ścieżka gotowa"
+                            },
+                            Data = new Dictionary<string, string>
+                            {
+                                ["Path"] = bestPathString
+                            }
+                        }
+                    );
+                }
+                await _messaging.SendAllAsync(messagees);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Invalid Token");
             }
         }
     }

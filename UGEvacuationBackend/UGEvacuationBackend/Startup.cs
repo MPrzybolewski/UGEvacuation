@@ -1,4 +1,6 @@
 using System.Text;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -16,6 +18,7 @@ using UGEvacuationDAL;
 using UGEvacuationDAL.Repositories;
 using UGEvacuationDAL.Repositories.Interfaces;
 using Swashbuckle.AspNetCore.Swagger;
+using UGEvacuationDAL.Entities;
 
 namespace UGEvacuationBackend
 {
@@ -31,21 +34,31 @@ namespace UGEvacuationBackend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            FirebaseApp.Create(new AppOptions()
+            {
+                Credential = GoogleCredential.FromFile("key.json"),
+            });
+            
             var appSettings = new AppSettings();
             Configuration.Bind(appSettings);
             
             services.Configure<IAppSettings>(Configuration);
             services.AddSingleton<IAppSettings>(appSettings);
             
-            services.AddDbContext<UGEvacuationContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("UGEvacuationContext")));
+            // services.AddDbContext<UGEvacuationContext>(options =>
+            //     options.UseSqlServer(Configuration.GetConnectionString("UGEvacuationContext")));
             
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<INotificationsService, NotificationService>();
             services.AddScoped<IRegistrationService, RegistrationService>();
+            services.AddScoped<IEvacuationService, EvacuationService>();
+            services.AddScoped<IEvacuationNodeService, EvacuationNodeService>();
             
             services.AddScoped<IAdminUserRepository, AdminUserRepository>();
             services.AddScoped<IAppUserRepository, AppUserRepository>();
+            services.AddScoped<IEvacuationRepository, EvacuationRepository>();
+            services.AddScoped<IEvacuationNodeRepository, EvacuationNodeRepository>();
+            services.AddScoped<IEvacuationNodeAppUserRepository, EvacuationNodeAppUserRepository>();
             
             services.AddControllers();
             

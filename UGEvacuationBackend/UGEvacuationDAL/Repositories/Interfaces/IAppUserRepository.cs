@@ -1,12 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UGEvacuationDAL.Entities;
 
 namespace UGEvacuationDAL.Repositories.Interfaces
 {
     public interface IAppUserRepository
     {
-        void Create(string token);
-        IEnumerable<AppUser> GetAll();
+        Task<AppUser> Create(string token);
+        Task<List<AppUser>> GetAll();
     }
 }

@@ -8,16 +8,16 @@ namespace UGEvacuationCommon.Models
         public int TimeInstant;
         public List<BucketElement> BucketElements = new List<BucketElement>();
 
-        public void AddEdgeOrDensity(Edge edge)
+        public void AddEdgeOrDensity(Edge edge, int density)
         {
             if (BucketElements.Any(be => be.Edge == edge))
             {
                 var bucketElement = BucketElements.First(be => be.Edge == edge);
-                bucketElement.Density += 30;
+                bucketElement.Density += 0;
             }
             else
             {
-                BucketElements.Add(new BucketElement(edge, 10));
+                BucketElements.Add(new BucketElement(edge, density));
             }
         }
     }

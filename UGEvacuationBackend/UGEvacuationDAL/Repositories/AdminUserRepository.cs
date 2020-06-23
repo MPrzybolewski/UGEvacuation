@@ -1,4 +1,6 @@
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using UGEvacuationDAL.Entities;
 using UGEvacuationDAL.Repositories.Interfaces;
 
@@ -6,17 +8,16 @@ namespace UGEvacuationDAL.Repositories
 {
     public class AdminUserRepository : IAdminUserRepository
     {
-        private readonly UGEvacuationContext _dbContext;
-        
-        public AdminUserRepository(UGEvacuationContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
 
-        public AdminUser GetByUsername(string userName)
+        public async Task<AdminUser> GetByUsername(string userName)
         {
-            var appUser = _dbContext.AdminUsers.FirstOrDefault(u => u.Username == userName && u.IsDeleted == false);
-            return appUser;
+            using (var context = new UGEvacuationContext())
+            {
+                var appUser =
+                    await context.AdminUsers.FirstOrDefaultAsync(u =>
+                        u.Username == userName && u.IsDeleted == false);
+                return appUser;
+            }
         }
     }
 }

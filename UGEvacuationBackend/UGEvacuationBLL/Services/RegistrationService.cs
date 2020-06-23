@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using UGEvacuationBLL.Services.Interfaces;
 using UGEvacuationDAL.Repositories.Interfaces;
 
@@ -13,11 +14,12 @@ namespace UGEvacuationBLL.Services
             _appUserRepository = appUserRepository;
         }
 
-        public void RegisterAppUser(string token)
+        public async Task<Guid> RegisterAppUser(string token)
         {
             try
             {
-                _appUserRepository.Create(token);
+                var appUser = await _appUserRepository.Create(token);
+                return appUser.Id;
             }
             catch (Exception ex)
             {

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UGEvacuationDAL;
 
 namespace UGEvacuationDAL.Migrations
 {
     [DbContext(typeof(UGEvacuationContext))]
-    partial class UGEvacuationContextModelSnapshot : ModelSnapshot
+    [Migration("20200618210239_EvacuationsNodes")]
+    partial class EvacuationsNodes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,45 +96,6 @@ namespace UGEvacuationDAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EvacuationNode");
-                });
-
-            modelBuilder.Entity("UGEvacuationDAL.Entities.EvacuationNodeAppUser", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AppUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("EvacuationNodeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
-
-                    b.HasIndex("EvacuationNodeId");
-
-                    b.ToTable("EvacuationNodeAppUser");
-                });
-
-            modelBuilder.Entity("UGEvacuationDAL.Entities.EvacuationNodeAppUser", b =>
-                {
-                    b.HasOne("UGEvacuationDAL.Entities.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("UGEvacuationDAL.Entities.EvacuationNode", "EvacuationNode")
-                        .WithMany()
-                        .HasForeignKey("EvacuationNodeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -10,14 +10,14 @@ using UGEvacuationDAL;
 namespace UGEvacuationDAL.Migrations
 {
     [DbContext(typeof(UGEvacuationContext))]
-    [Migration("20200611145842_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20200616200146_Evacuation")]
+    partial class Evacuation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.4")
+                .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -56,6 +56,23 @@ namespace UGEvacuationDAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppUser");
+                });
+
+            modelBuilder.Entity("UGEvacuationDAL.Entities.Evacuation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BlockedEdges")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Evacuation");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,7 +1,10 @@
+using System;
+using System.Threading.Tasks;
+
 namespace UGEvacuationBLL.Services.Interfaces
 {
     public interface IRegistrationService
     {
-        void RegisterAppUser(string token);
+        Task<Guid> RegisterAppUser(string token);
     }
 }

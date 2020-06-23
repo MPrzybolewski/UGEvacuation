@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UGEvacuationBackend.Models;
@@ -19,7 +20,7 @@ namespace UGEvacuationBackend.Controllers
         
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Login([FromBody] LoginRequest loginRequest)
+        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
         {
             try
             {
@@ -28,7 +29,7 @@ namespace UGEvacuationBackend.Controllers
                     Username = loginRequest.Username,
                     Password = loginRequest.Password
                 };
-                var authenticatedUser = _loginService.AuthenticateUser(login);
+                var authenticatedUser = await _loginService.AuthenticateUser(login);
 
                 if (authenticatedUser != null)
                 {

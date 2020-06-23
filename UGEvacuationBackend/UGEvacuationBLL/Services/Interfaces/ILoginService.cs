@@ -1,9 +1,10 @@
+using System.Threading.Tasks;
 using UGEvacuationBLL.Models;
 
 namespace UGEvacuationBLL.Services.Interfaces
 {
     public interface ILoginService
     {
-        AuthenticatedUser AuthenticateUser(Login login);
+        Task<AuthenticatedUser> AuthenticateUser(Login login);
     }
 }

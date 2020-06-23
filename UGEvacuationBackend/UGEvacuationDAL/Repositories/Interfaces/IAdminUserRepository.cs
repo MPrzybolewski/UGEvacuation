@@ -1,9 +1,10 @@
+using System.Threading.Tasks;
 using UGEvacuationDAL.Entities;
 
 namespace UGEvacuationDAL.Repositories.Interfaces
 {
     public interface IAdminUserRepository
     {
-        AdminUser GetByUsername(string userName);
+        Task<AdminUser> GetByUsername(string userName);
     }
 }

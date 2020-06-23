@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "evacuationsystemug",
+  "private_key_id": "037a25f2c3a800a03de6138a852fffd557c9989f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC7XZANClBjXFNl\np+89TSvJQ9wq6grANbtqD1GgjKmFNehusgSAkS6INyhrNUWn4AmXDmcghAiBeVVt\nO+mIM4AyOEkXSwylcajQIwGQqCMbVL1bhYvN+oBUJSvmVxwF266t988WnQ3jJfE7\nWg9Kpyio7uHBPRP5DlqyavsQapEvsHqOddLKgrsd4InVJCf16yqgy5YweRgAZtIr\n02ftom9q/xcg0uRiFVZcfH+KTS58Sohw9ZSf2iT+A+CnS4w3O2r5UhWqdvhZHaHk\naIw5cxtp7DR5ExNxaAV4LH22zu3iK27LS31Kq1u5jHvewTQVKMRhj+zojR4lC0lk\nrZgxzEMRAgMBAAECggEAA/z62vw0N9k4QTqw4fopi3AxWIyAzBSYt6o5z5QO67H5\nD5okdGQivG2II7gPkoI3UgrRcSS+VZsykU+sKeUGvorqK1/Clib0M/H6z4x0qtlD\n6pXOIwVJBAGCjLWf+BP0BOn4c3/GUuZ02xGQr8MdH3NuRMG7EhsXHSMf0vqhuoUa\n06AifhI5qPSntP5Z55f6LHOnDxhJsQ0VUtBSWjT1I3aq+rdvqoBVuaqtuu1t5l9y\nxIsG5NJ5Kn8AywTTT7E1a74fY8j9ln+OkHrNy0G3quQyI2jWvp3F8Cfu1hV6Izcg\nlXrBj2mPfBuPAb1ZuNZiKPuSnZRYDrLY3uVQV+dcLQKBgQDeG7To1fyT8QUfaW9I\ncCZlmH16hq7saC+x22ZLEXFKB6QNNqHljB0RSvE6JMFm8pdqRF2BB8GewcOonzQ8\nK5CUGQiLQ/KqZOV0oPSEohCd47EdX45JKwucA8MvI9i80jKDByhjF7rKwmQnjlJm\n//ysmX5lY5hx1N7bZ2pT4I7xDwKBgQDX9LACUxW1jDnNlPx2MkrGyfFXKus94jZS\nzIu6lXuWuLl3ZrhbhWhauQRRB73o+TYeue+3IamvWQgCzxazmQ9iK8txda21u3zM\ni7CJ38dAq4JJo1dAMJyKIgmyxNHQxlXQra+qaK/OItNXkAvNmUgrt5nz8oUqAu6q\nOoWnjsVJ3wKBgQDWdYpJB9XKQ37exb9eAmwQzRzbohBk1HS5F0++TClHgfk1iPrp\n2lB20hX6PmNANB1fzoM6g3LBB/cUaiTVtHr1hPZrAkDdpm6oHoH7T0EcMy5hXlLU\n82tSSY+9hK9SIuQDAHZOuCr0fJ6YUyPdsG8ZeVxCKdiYkSJeV4yjUMC0oQKBgAYg\nL7nxJ2V988nMFxk3Nf3Ljqf9VKzttMLGgJQrV1UgKkqjxEj8UMh6BRBTWuS35Pwc\nJBuavdh2ew6xVyCDD/el7GBsiR/lkJWwxLI0gc9ozgpOstPkTRxx+Lp0cMsuRRLl\nSl1YGNyNCleqg1sypORwkdJkp7hYWvLDNDVbjGcbAoGAZQ7J1p16CNyNXocjeWlu\nOVXUfUdNvlebFSfx16bAxNP7hTSiwZq7jJvFS7gva9N+K1JlNF6SNvsIUfDI6pJ5\n8+qn1VPjBXVtJTuUAli+z178X4rvn+nFvoWulX0qBdA2IlWXgLTwYXsDOuJ9lLQt\ny9KBjZK2TBNmiru7DKUXHXE=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-qmkue@evacuationsystemug.iam.gserviceaccount.com",
+  "client_id": "118232551142050748784",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-qmkue%40evacuationsystemug.iam.gserviceaccount.com"
+}

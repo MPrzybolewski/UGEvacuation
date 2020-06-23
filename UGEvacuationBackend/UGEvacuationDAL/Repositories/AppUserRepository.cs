@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using UGEvacuationCommon.Enums;
 using UGEvacuationCommon.Models;
 using UGEvacuationDAL.Entities;
@@ -8,29 +11,31 @@ namespace UGEvacuationDAL.Repositories
 {
     public class AppUserRepository : IAppUserRepository
     {
-        private readonly UGEvacuationContext _dbContext;
-
-        public AppUserRepository(UGEvacuationContext dbContext)
+        public async Task<AppUser> Create(string token)
         {
-            _dbContext = dbContext;
-        }
-        public void Create(string token)
-        {
-            if (string.IsNullOrEmpty(token))
-                throw new UGEvacuationException("AppUserRepository - token cannot be null or empty", type: ErrorType.InvalidArgument);
-            
-            var appUser = new AppUser
+            using (var context = new UGEvacuationContext())
             {
-                Token = token
-            };
-            
-            _dbContext.AppUsers.Add(appUser);
-            _dbContext.SaveChanges();
+                if (string.IsNullOrEmpty(token))
+                    throw new UGEvacuationException("AppUserRepository - token cannot be null or empty",
+                        type: ErrorType.InvalidArgument);
+
+                var appUser = new AppUser
+                {
+                    Token = token
+                };
+
+                await context.AppUsers.AddAsync(appUser);
+                await context.SaveChangesAsync();
+                return appUser;
+            }
         }
 
-        public IEnumerable<AppUser> GetAll()
+        public async Task<List<AppUser>> GetAll()
         {
-            return _dbContext.AppUsers.AsQueryable();
+            using (var context = new UGEvacuationContext())
+            {
+                return await context.AppUsers.ToListAsync();
+            }
         }
     }
 }

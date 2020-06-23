@@ -1,6 +1,7 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 using UGEvacuationBLL.Helpers;
 using UGEvacuationBLL.Models;
@@ -21,11 +22,11 @@ namespace UGEvacuationBLL.Services
             _adminUserRepository = adminUserRepository;
             _appSettings = appSettings;
         }
-        public AuthenticatedUser AuthenticateUser(Login login)
+        public async Task<AuthenticatedUser> AuthenticateUser(Login login)
         {
             try
             {
-                var appUser = _adminUserRepository.GetByUsername(login.Username);
+                var appUser = await _adminUserRepository.GetByUsername(login.Username);
 
                 if (appUser == null)
                     return null;

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UGEvacuationDAL;
 
 namespace UGEvacuationDAL.Migrations
 {
     [DbContext(typeof(UGEvacuationContext))]
-    partial class UGEvacuationContextModelSnapshot : ModelSnapshot
+    [Migration("20200619183106_EvacuationsNodesAppUsers")]
+    partial class EvacuationsNodesAppUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,10 +104,10 @@ namespace UGEvacuationDAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AppUserId")
+                    b.Property<Guid?>("AppUserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("EvacuationNodeId")
+                    b.Property<Guid?>("EvacuationNodeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
@@ -124,15 +126,11 @@ namespace UGEvacuationDAL.Migrations
                 {
                     b.HasOne("UGEvacuationDAL.Entities.AppUser", "AppUser")
                         .WithMany()
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AppUserId");
 
                     b.HasOne("UGEvacuationDAL.Entities.EvacuationNode", "EvacuationNode")
                         .WithMany()
-                        .HasForeignKey("EvacuationNodeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EvacuationNodeId");
                 });
 #pragma warning restore 612, 618
         }

@@ -7,20 +7,16 @@ namespace UGEvacuationBLL.Helpers
 {
     public static class PathManager
     {
-
-        public static Dictionary<int, Path> GetBestPathForNodesIds(List<Node> graph, List<int> startNodesIds)
+        public static Dictionary<int, Path> GetBestPathForNodesIds(List<Node> graph, Dictionary<int, int> startNodesIdsWithDensities)
         {
-            var pathsForNodeIds = new Dictionary<int, List<Path>>();
-
-            foreach (var startNodeId in startNodesIds)
-            {
-                pathsForNodeIds.Add(startNodeId, new List<Path>());
-            }
+            var pathsForNodeIds = new Dictionary<NodeWithDensity, List<Path>>();
             
-            foreach (var startNode in graph.Where(n => startNodesIds.Contains(n.Id)))
+            foreach (var startNode in graph.Where(n => startNodesIdsWithDensities.Keys.Contains(n.Id)))
             {
+                var nodeWithDensity = new NodeWithDensity(startNode, startNodesIdsWithDensities[startNode.Id]);
+                pathsForNodeIds.Add(nodeWithDensity, new List<Path>());
                 var pathsForNode = GetAllRescuePathsForNode(startNode, new List<Node>() { startNode }).Where(p => p.NodesList != null).ToList();
-                pathsForNodeIds[startNode.Id] = pathsForNode;
+                pathsForNodeIds[nodeWithDensity] = pathsForNode;
             }
 
             return GetBestPaths(pathsForNodeIds);
@@ -89,39 +85,39 @@ namespace UGEvacuationBLL.Helpers
             return pathsForCurrentNode;
         }
 
-        public static Dictionary<int, Path> GetBestPaths(Dictionary<int, List<Path>> pathsForNodeIds)
+        public static Dictionary<int, Path> GetBestPaths(Dictionary<NodeWithDensity, List<Path>> pathsForNodeIds)
         {
             bool isValid = false;
             Edge? edgeWithExceededDensity;
-            Dictionary<int, List<Path>> orderedPathsForNodeIds;
-            Dictionary<int, Path> shortestPathsForNodeIds;
+            Dictionary<NodeWithDensity, List<Path>> orderedPathsForNodes;
+            Dictionary<NodeWithDensity, Path> shortestPathsForNodes;
 
             if (pathsForNodeIds.Values.Any(p => p == null || p.Count == 0))
                 throw new UGEvacuationException("GetBestPaths - there is node without any path", type: ErrorType.NoPath);
             
             while (true)
             {
-                orderedPathsForNodeIds = OrderPathsByLength(pathsForNodeIds);
+                orderedPathsForNodes = OrderPathsByLength(pathsForNodeIds);
 
-                shortestPathsForNodeIds = orderedPathsForNodeIds.ToDictionary(p => p.Key, p => p.Value[0]);
+                shortestPathsForNodes = orderedPathsForNodes.ToDictionary(p => p.Key, p => p.Value[0]);
 
-                var bucketList = CreateBucketList(shortestPathsForNodeIds.Values.ToList());
+                var bucketList = CreateBucketList(shortestPathsForNodes);
 
                 edgeWithExceededDensity = GetEdgeWithExceededDensity(bucketList);
 
                 if (edgeWithExceededDensity == null)
                 {
-                    return shortestPathsForNodeIds;
+                    return shortestPathsForNodes.Select(s => new KeyValuePair<int,Path>(s.Key.Node.Id, s.Value)).ToDictionary(x=>x.Key, x=>x.Value);
                 }
                 
-                var nodeIdsForPathsWithExceededDensity = shortestPathsForNodeIds.Where(sp => sp.Value.HasEdge(edgeWithExceededDensity)).Select(sp => sp.Key).ToList();
-                var nodeIdWithNextShortestPath = orderedPathsForNodeIds
+                var nodeIdsForPathsWithExceededDensity = shortestPathsForNodes.Where(sp => sp.Value.HasEdge(edgeWithExceededDensity)).Select(sp => sp.Key).ToList();
+                var nodeIdWithNextShortestPath = orderedPathsForNodes
                     .Where(sp => nodeIdsForPathsWithExceededDensity.Contains(sp.Key) && sp.Value.Count > 1)
                     .OrderBy(sp => sp.Value[1].NodesList.Count).Select(sp => sp.Key).FirstOrDefault();
                 
-                if (!nodeIdsForPathsWithExceededDensity.Contains(nodeIdWithNextShortestPath))
+                if (nodeIdWithNextShortestPath == null || !nodeIdsForPathsWithExceededDensity.Contains(nodeIdWithNextShortestPath))
                 {
-                    return shortestPathsForNodeIds;
+                    return shortestPathsForNodes.Select(s => new KeyValuePair<int,Path>(s.Key.Node.Id, s.Value)).ToDictionary(x=>x.Key, x=>x.Value);
                 }
 
                 pathsForNodeIds[nodeIdWithNextShortestPath].RemoveAt(0);
@@ -142,9 +138,9 @@ namespace UGEvacuationBLL.Helpers
             return null;
         }
 
-        private static List<Bucket> CreateBucketList(List<Path> shortestPathsForNodeIds)
+        private static List<Bucket> CreateBucketList(Dictionary<NodeWithDensity, Path> shortestPathsForNodes)
         {
-            int maxPathElements = shortestPathsForNodeIds.Max(p => p.NodesList.Count);
+            int maxPathElements = shortestPathsForNodes.Values.Max(p => p.NodesList.Count);
 
             var bucketList = new List<Bucket>();
             for (int i = 0; i < maxPathElements; i++)
@@ -154,12 +150,12 @@ namespace UGEvacuationBLL.Helpers
                     TimeInstant = i + 1
                 };
                 
-                foreach (var path in shortestPathsForNodeIds)
+                foreach (var node in shortestPathsForNodes.Keys)
                 {
-                    if (path.NodesList.Count - 1 > i)
+                    if (shortestPathsForNodes[node].NodesList.Count - 1 > i)
                     {
-                        var edge = new Edge(path.NodesList[i], path.NodesList[i+1]);
-                        bucket.AddEdgeOrDensity(edge);   
+                        var edge = new Edge(shortestPathsForNodes[node].NodesList[i], shortestPathsForNodes[node].NodesList[i+1]);
+                        bucket.AddEdgeOrDensity(edge, node.Density);   
                     }
                 }
                 bucketList.Add(bucket);
@@ -168,13 +164,13 @@ namespace UGEvacuationBLL.Helpers
             return bucketList;
         }
 
-        private static Dictionary<int, List<Path>> OrderPathsByLength(Dictionary<int, List<Path>> pathsForNodeIds)
+        private static Dictionary<NodeWithDensity, List<Path>> OrderPathsByLength(Dictionary<NodeWithDensity, List<Path>> pathsForNodeIds)
         {
-            var orderedPaths = new Dictionary<int, List<Path>>();
-            foreach (var nodeId in pathsForNodeIds.Keys)
+            var orderedPaths = new Dictionary<NodeWithDensity, List<Path>>();
+            foreach (var nodeWithDensity in pathsForNodeIds.Keys)
             {
-                var orderedPathsForNode = pathsForNodeIds[nodeId].OrderBy(p => p.NodesList.Count).ToList();
-                orderedPaths.Add(nodeId, orderedPathsForNode);
+                var orderedPathsForNode = pathsForNodeIds[nodeWithDensity].OrderBy(p => p.NodesList.Count).ToList();
+                orderedPaths.Add(nodeWithDensity, orderedPathsForNode);
             }
 
             return orderedPaths;

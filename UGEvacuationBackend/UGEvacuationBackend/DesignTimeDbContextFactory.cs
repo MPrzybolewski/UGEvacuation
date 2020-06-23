@@ -21,7 +21,7 @@ namespace UGEvacuationBackend
  
             builder.UseSqlServer(connectionString);
  
-            return new UGEvacuationContext(builder.Options);
+            return new UGEvacuationContext();
         }
     }
 }
